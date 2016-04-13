@@ -14,6 +14,7 @@ namespace Matasano
 
             string converted = Set1.Challenge1.b64Encode(str);
             Console.WriteLine(converted);
+            var success = String.Equals("SSdtIGtpbGxpbmcgeW91ciBicmFpbiBsaWtlIGEgcG9pc29ub3VzIG11c2hyb29t", converted);
         }
     }
 }
