@@ -23,9 +23,13 @@ function bufferToBase64(buffer) {
     return btoa(binaryStr);
 }
 
+function checkSuccess(expected, actual){
+    if(expected !== actual){
+        throw new Error('Failed to give expected output. Expected: ' + expected + ' Actual: ' + actual);
+    }
+    console.log('GREAT JOB!!!');
+}
+
 let hexBytes = getBytesFromHexString('49276d206b696c6c696e6720796f757220627261696e206c696b65206120706f69736f6e6f7573206d757368726f6f6d');
 let encoded = bufferToBase64(hexBytes);
-if(encoded !== 'SSdtIGtpbGxpbmcgeW91ciBicmFpbiBsaWtlIGEgcG9pc29ub3VzIG11c2hyb29t'){
-    throw new Error('Failed to convert to expected output');
-}
-console.log('SUCCESS!!!');
+checkSuccess('SSdtIGtpbGxpbmcgeW91ciBicmFpbiBsaWtlIGEgcG9pc29ub3VzIG11c2hyb29t', encoded);
