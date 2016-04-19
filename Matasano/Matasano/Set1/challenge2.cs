@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Matasano.Set1
 {
-    class Challenge2
+    class challenge2
     {
         public static string b64Encode(string input)
         {

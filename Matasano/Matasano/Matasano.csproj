@@ -44,7 +44,9 @@
   <ItemGroup>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Set1\Challenge1.cs" />
+    <Compile Include="Utils\helpers.cs" />
+    <Compile Include="Set1\challenge2.cs" />
+    <Compile Include="Set1\challenge1.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
