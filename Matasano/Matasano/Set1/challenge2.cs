@@ -1,37 +1,23 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Matasano.Set1
 {
-    class challenge2
+    class Challenge2
     {
-        public static string b64Encode(string input)
+        public static bool solve()
         {
-            byte[] bytes = BytesFromHexString(input);
-            return Convert.ToBase64String(bytes);
-        }
+            byte[] byteArr1 = Helpers.bytesFromHexString("1c0111001f010100061a024b53535009181c");
+            byte[] byteArr2 = Helpers.bytesFromHexString("686974207468652062756c6c277320657965");
 
-        public static byte[] BytesFromHexString(string hex)
-        {
-            const int HEX_CHAR_LEN = 2; //hex strings are 2 chars long each
-            if (hex.Length % 2 != 0)
+            byte[] xoredValues = Helpers.xor(byteArr1, byteArr2);
+            string stringVal = Helpers.stringFromByteArray(xoredValues);
+            bool success = Helpers.verify("746865206b696420646f6e277420706c6179", stringVal);
+            if (success)
             {
-                throw new InvalidOperationException(String.Format("Badly formed hex string: {0}", hex));
+                Console.WriteLine("Success!");
             }
 
-            int strLen = hex.Length;
-            int bufferLen = strLen / HEX_CHAR_LEN;
-            var buffer = new byte[bufferLen];
-            for (int i = 0, j = 0; i < strLen; i += 2, j++)
-            {
-                buffer[j] = byte.Parse(hex.Substring(i, 2), NumberStyles.HexNumber);
-            }
-
-            return buffer;
+            return success;
         }
     }
 }

@@ -7,31 +7,21 @@ using System.Threading.Tasks;
 
 namespace Matasano.Set1
 {
-    class challenge1
+    class Challenge1
     {
-        public static string b64Encode(string input)
+        public static bool solve()
         {
-            byte[] bytes = BytesFromHexString(input);
-            return Convert.ToBase64String(bytes);
-        }
+            var str = "49276d206b696c6c696e6720796f757220627261696e206c696b65206120706f69736f6e6f7573206d757368726f6f6d";
 
-        public static byte[] BytesFromHexString(string hex)
-        {
-            const int HEX_CHAR_LEN = 2; //hex strings are 2 chars long each
-            if (hex.Length % 2 != 0)
+            string actual = Helpers.b64Encode(str);
+            string expected= "SSdtIGtpbGxpbmcgeW91ciBicmFpbiBsaWtlIGEgcG9pc29ub3VzIG11c2hyb29t";
+            bool success = Helpers.verify(expected, actual);
+            if (success)
             {
-                throw new InvalidOperationException(String.Format("Badly formed hex string: {0}", hex));
+                Console.WriteLine("Success!");
             }
 
-            int strLen = hex.Length;
-            int bufferLen = strLen / HEX_CHAR_LEN;
-            var buffer = new byte[bufferLen];
-            for (int i = 0, j = 0; i < strLen; i += 2, j++)
-            {
-                buffer[j] = byte.Parse(hex.Substring(i, 2), NumberStyles.HexNumber);
-            }
-
-            return buffer;
+            return success;
         }
     }
 }
