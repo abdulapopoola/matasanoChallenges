@@ -21,7 +21,7 @@ function getByteValuesFromHexString(hex) {
 
 function getHexStringForByteValuesArray(byteValuesArray) {
     //returns hex string for bytes values e.g. [255, 255] would be converted into 'FFFF'
-    let hexValues = byteValuesArray.map(byteVal => (byteVal).toString(16));//.. is necessary to bypass JS behaviour
+    let hexValues = byteValuesArray.map(byteVal => (byteVal).toString(16));
     return hexValues.join('');    
 }
 
