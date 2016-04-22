@@ -90,7 +90,6 @@ function getAllPossible() {
         xorByteArr.fill(i);
         let xoredValues = XOR(byteArray1, xorByteArr);
         let string = getASCIIStringFromHexValues(xoredValues);
-        console.log(string);
         possibilities.push(string);
     }
     
@@ -110,6 +109,10 @@ function crossEntropy(str, freqArr) {
         } else {
             nonAlphabetical++;
         }
+    }
+    
+    if(nonAlphabetical > (len / 2)){
+        return Infinity; //Mostly gibberish that might skew the entropy values
     }
     return -(sum / (len - nonAlphabetical));
 }
