@@ -29,25 +29,6 @@ const UNIGRAM_FREQUENCIES = {
     z: 0.09
 };
 
-function getByteValuesFromHexString(hex) {
-    //returns integer values for bytes e.g. FF would be converted to 255
-    const HEX_CHAR_LEN = 2; //hex strings are 2 chars long each
-    if (hex.length % 2 != 0) {
-        throw new Error("Badly formed hex string: " + hex);
-    }
-
-    let strLen = hex.length;
-    let bufferLen = strLen / HEX_CHAR_LEN;
-    let buffer = new ArrayBuffer(bufferLen);
-    let bufferView = new Uint8ClampedArray(buffer);
-    for (let i = 0, j = 0; i < strLen; i += 2, j++) {
-        let val = parseInt(hex.substr(i, 2), 16);
-        bufferView[j] = val;
-    }
-
-    return bufferView;
-}
-
 function getHexStringForByteValuesArray(byteValuesArray) {
     //returns hex string for bytes values e.g. [255, 255] would be converted into 'FFFF'
     let hexValues = byteValuesArray.map(byteVal => (byteVal).toString(16));
