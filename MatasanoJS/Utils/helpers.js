@@ -19,12 +19,6 @@ function getByteValuesFromHexString(hex) {
     return bufferView;
 }
 
-function getHexStringForByteValuesArray(byteValuesArray) {
-    //returns hex string for bytes values e.g. [255, 255] would be converted into 'FFFF'
-    let hexValues = byteValuesArray.map(byteVal => (byteVal).toString(16));
-    return hexValues.join('');    
-}
-
 function XOR(byteArray1, byteArray2) {
     let byteArray1Len = byteArray1.length;
     if (byteArray1Len !== byteArray2.length) {
@@ -46,8 +40,29 @@ function checkSuccess(expected, actual){
     console.log('GREAT JOB!!!');
 }
 
-let byteArray1 = getByteValuesFromHexString('1c0111001f010100061a024b53535009181c');
-let xorBytes = getByteValuesFromHexString('686974207468652062756c6c277320657965');
-let xoredValues = XOR(byteArray1, xorBytes);
-let ans = getHexStringForByteValuesArray(xoredValues);
-checkSuccess('746865206b696420646f6e277420706c6179', ans);
+function bufferToBase64(buffer) {
+    let binaryStr = String.fromCharCode.apply(String, buffer);
+    return btoa(binaryStr);
+}
+
+function getHexStringForByteValuesArray(byteValuesArray) {
+    //returns hex string for bytes values e.g. [255, 255] would be converted into 'FFFF'
+    let hexValues = byteValuesArray.map(byteVal => (byteVal).toString(16));
+    return hexValues.join('');    
+}
+
+function getASCIIStringFromHexValues(hexValues) {
+    return String.fromCharCode.apply(String, hexValues).join('');
+    //return hexValues.map(hexVal => String.fromCharCode(hexVal)).join('');
+}
+
+function values(obj){
+    return Object.keys(obj).map(key => obj[key]);
+}
+
+exports.XOR = XOR;
+exports.getByteValuesFromHexString = getByteValuesFromHexString;
+exports.checkSuccess = checkSuccess;
+exports.getHexStringForByteValuesArray = getHexStringForByteValuesArray;
+exports.bufferToBase64 = bufferToBase64;
+exports.getASCIIStringFromHexValues = getASCIIStringFromHexValues;

@@ -1,4 +1,5 @@
 'use strict';
+const helpers = require('../Utils/helpers.js');
 
 const UNIGRAM_FREQUENCIES = {
     a: 8.04,
@@ -29,48 +30,16 @@ const UNIGRAM_FREQUENCIES = {
     z: 0.09
 };
 
-function getHexStringForByteValuesArray(byteValuesArray) {
-    //returns hex string for bytes values e.g. [255, 255] would be converted into 'FFFF'
-    let hexValues = byteValuesArray.map(byteVal => (byteVal).toString(16));
-    return hexValues.join('');
-}
-
-function XOR(byteArray1, byteArray2) {
-    let byteArray1Len = byteArray1.length;
-    if (byteArray1Len !== byteArray2.length) {
-        throw new Error('Unequal byte lengths: ' + byteArray1Len + ' : ' + byteArray2.length);
-    }
-
-    let xoredBytes = new Array(byteArray1Len);
-    for (let i = 0; i < byteArray1Len; i++) {
-        xoredBytes[i] = byteArray1[i] ^ byteArray2[i];
-    }
-
-    return xoredBytes;
-}
-
-function getASCIIStringFromHexValues(hexValues) {
-    return String.fromCharCode.apply(String, hexValues).join('');
-    //return hexValues.map(hexVal => String.fromCharCode(hexVal)).join('');
-}
-
-function checkSuccess(expected, actual) {
-    if (expected !== actual) {
-        throw new Error('Failed to give expected output. Expected: ' + expected + ' Actual: ' + actual);
-    }
-    console.log('GREAT JOB!!!');
-}
-
-function getAllPossible() {
-    let byteArray1 = getByteValuesFromHexString('1b37373331363f78151b7f2b783431333d78397828372d363c78373e783a393b3736');
+function getAllPossible(str) {
+    let byteArray1 = helpers.getByteValuesFromHexString(str);
     let byteArrLen = byteArray1.length;
 
     let possibilities = [];
     for (let i = 0; i < 256; i++) {
         let xorByteArr = new Array(byteArrLen);
         xorByteArr.fill(i);
-        let xoredValues = XOR(byteArray1, xorByteArr);
-        let string = getASCIIStringFromHexValues(xoredValues);
+        let xoredValues = helpers.XOR(byteArray1, xorByteArr);
+        let string = helpers.getASCIIStringFromHexValues(xoredValues);
         possibilities.push(string);
     }
     
@@ -98,10 +67,10 @@ function crossEntropy(str, freqArr) {
     return -(sum / (len - nonAlphabetical));
 }
 
-function decrypt() {
+function decrypt(str) {
     let normalizedFreqs = values(UNIGRAM_FREQUENCIES).map(freq => freq / 100);
 
-    let possibilities = getAllPossible();
+    let possibilities = getAllPossible(str);
     let entropies = [];
     for (let i = 0, len = possibilities.length; i < len; i++) {
         let entropy = crossEntropy(possibilities[i], normalizedFreqs);
@@ -122,8 +91,4 @@ function decrypt() {
     //shift is also bestAnswerIndex
 }
 
-function values(obj){
-    return Object.keys(obj).map(key => obj[key]);
-}
-
-decrypt();
+exports.decrypt = decrypt;
