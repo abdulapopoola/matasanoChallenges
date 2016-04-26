@@ -68,7 +68,7 @@ function crossEntropy(str, freqArr) {
 }
 
 function decrypt(str) {
-    let normalizedFreqs = values(UNIGRAM_FREQUENCIES).map(freq => freq / 100);
+    let normalizedFreqs = helpers.values(UNIGRAM_FREQUENCIES).map(freq => freq / 100);
 
     let possibilities = getAllPossible(str);
     let entropies = [];
@@ -89,6 +89,14 @@ function decrypt(str) {
     let bestAnswerIndex = entropies[0][0];
     return possibilities[bestAnswerIndex];
     //shift is also bestAnswerIndex
+}
+
+function log2(val){
+    if(Math.log2){
+        return Math.log2(val);
+    } else {
+        return Math.log(val) / Math.log(2);
+    }
 }
 
 exports.decrypt = decrypt;

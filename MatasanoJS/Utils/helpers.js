@@ -33,8 +33,8 @@ function XOR(byteArray1, byteArray2) {
     return xoredBytes;
 }
 
-function checkSuccess(expected, actual){
-    if(expected !== actual){
+function checkSuccess(expected, actual) {
+    if (expected !== actual) {
         throw new Error('Failed to give expected output. Expected: ' + expected + ' Actual: ' + actual);
     }
     console.log('GREAT JOB!!!');
@@ -48,16 +48,22 @@ function bufferToBase64(buffer) {
 function getHexStringForByteValuesArray(byteValuesArray) {
     //returns hex string for bytes values e.g. [255, 255] would be converted into 'FFFF'
     let hexValues = byteValuesArray.map(byteVal => (byteVal).toString(16));
-    return hexValues.join('');    
+    return hexValues.join('');
 }
 
 function getASCIIStringFromHexValues(hexValues) {
-    return String.fromCharCode.apply(String, hexValues).join('');
-    //return hexValues.map(hexVal => String.fromCharCode(hexVal)).join('');
+    return String.fromCharCode.apply(String, hexValues);
 }
 
-function values(obj){
+function values(obj) {
     return Object.keys(obj).map(key => obj[key]);
+}
+
+function btoa(str) {
+    if (typeof window !== 'undefined' && window.btoa) {
+        return window.btoa(str);
+    }
+    return new Buffer(str).toString('base64');
 }
 
 exports.XOR = XOR;
@@ -66,3 +72,4 @@ exports.checkSuccess = checkSuccess;
 exports.getHexStringForByteValuesArray = getHexStringForByteValuesArray;
 exports.bufferToBase64 = bufferToBase64;
 exports.getASCIIStringFromHexValues = getASCIIStringFromHexValues;
+exports.values = values;
