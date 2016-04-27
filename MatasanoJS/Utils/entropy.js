@@ -42,7 +42,7 @@ function getAllPossible(str) {
         let string = helpers.getASCIIStringFromHexValues(xoredValues);
         possibilities.push(string);
     }
-    
+
     return possibilities;
 }
 
@@ -60,8 +60,8 @@ function crossEntropy(str, freqArr) {
             nonAlphabetical++;
         }
     }
-    
-    if(nonAlphabetical > (len / 2)){
+
+    if (nonAlphabetical > (len / 2)) {
         return Infinity; //Mostly gibberish that might skew the entropy values
     }
     return -(sum / (len - nonAlphabetical));
@@ -91,8 +91,40 @@ function decrypt(str) {
     //shift is also bestAnswerIndex
 }
 
-function log2(val){
-    if(Math.log2){
+function decryptMany(strs) {
+    let normalizedFreqs = helpers.values(UNIGRAM_FREQUENCIES).map(freq => freq / 100);
+
+    let entropies = [];
+    let possibilities = [];
+    for (let str of strs) {
+        let strPossibilities = getAllPossible(str);
+        let indexCounter = 0;
+        for (let i = 0, len = strPossibilities.length; i < len; i++) {
+            let entropy = crossEntropy(strPossibilities[i], normalizedFreqs);
+            let index = i + 256*indexCounter;
+            entropies.push([i, entropy]);
+            possibilities.push(strPossibilities[i]);
+        }
+        indexCounter++;
+    }
+
+    entropies.sort(function (x, y) {
+        // Compare by lowest entropy, break ties by lowest shift
+        if (x[1] < y[1]) return -1;
+        else if (x[1] > y[1]) return 1;
+        else if (x[0] < y[0]) return -1;
+        else if (x[0] > y[0]) return 1;
+        else return 0;
+    });
+
+    let bestAnswerIndex = entropies[0][0];
+    console.log(entropies.length);
+    console.log(bestAnswerIndex);
+    return possibilities[bestAnswerIndex];
+}
+
+function log2(val) {
+    if (Math.log2) {
         return Math.log2(val);
     } else {
         return Math.log(val) / Math.log(2);
@@ -100,3 +132,4 @@ function log2(val){
 }
 
 exports.decrypt = decrypt;
+exports.decryptMany = decryptMany;
