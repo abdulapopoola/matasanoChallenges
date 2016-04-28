@@ -75,6 +75,7 @@ function decrypt(str) {
     for (let i = 0, len = possibilities.length; i < len; i++) {
         let entropy = crossEntropy(possibilities[i], normalizedFreqs);
         entropies.push([i, entropy]);
+        //console.log("Entry "+ i +" : " + entropy)
     }
 
     entropies.sort(function (x, y) {
@@ -102,12 +103,17 @@ function decryptMany(strs) {
         for (let i = 0, len = strPossibilities.length; i < len; i++) {
             let entropy = crossEntropy(strPossibilities[i], normalizedFreqs);
             let index = i + 256*indexCounter;
+            if(entropy === Infinity){
+                //continue;
+            }
+            //console.log("Entry "+ i +" : " + entropy);
             entropies.push([i, entropy]);
             possibilities.push(strPossibilities[i]);
         }
         indexCounter++;
     }
 
+    console.log(possibilities.length);
     entropies.sort(function (x, y) {
         // Compare by lowest entropy, break ties by lowest shift
         if (x[1] < y[1]) return -1;
@@ -120,7 +126,36 @@ function decryptMany(strs) {
     let bestAnswerIndex = entropies[0][0];
     console.log(entropies.length);
     console.log(bestAnswerIndex);
+    
+    for(let i=0; i < entropies.length; i++){
+        var index = entropies[i][0];
+        var decode = possibilities[index];
+        if(!isGibberish(decode)){
+            //console.log(possibilities[index]);
+        }
+    }
+    
     return possibilities[bestAnswerIndex];
+}
+
+function isGibberish(str) {
+    str = str.toLowerCase();
+    let sum = 0;
+    let nonAlphabetical = 0;
+    let len = str.length;
+    for (let i = 0; i < len; i++) {
+        let charIndex = str.charCodeAt(i);
+        if (charIndex >= 97 && charIndex <= 122) {
+        } else {
+            nonAlphabetical++;
+        }
+    }
+    
+    if(nonAlphabetical > len / 5){
+        return true;
+    }
+    
+    return false;
 }
 
 function log2(val) {
@@ -133,3 +168,4 @@ function log2(val) {
 
 exports.decrypt = decrypt;
 exports.decryptMany = decryptMany;
+exports.isGibberish = isGibberish;

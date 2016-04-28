@@ -14,12 +14,17 @@ const rl = readline.createInterface({
 let strs = [];
 rl.on('line', (line) => {
     //console.log('Line from file:', line);
+    let decrypt = entropy.decrypt(line);
+    if(!entropy.isGibberish(decrypt))
+        console.log(decrypt);
     strs.push(line);
 });
 
 rl.on('close', (line) => {
-    console.log(entropy.decryptMany(strs));
+    //console.log(entropy.decryptMany(strs));
 });
+
+//nOW THAT THE PARTY IS JUMPING*
 
 //console.log(entropy.decryptMany(strs));
 //Need to read file
