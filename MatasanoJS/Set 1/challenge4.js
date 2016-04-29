@@ -15,8 +15,10 @@ let strs = [];
 rl.on('line', (line) => {
     //console.log('Line from file:', line);
     let decrypt = entropy.decrypt(line);
-    if(!entropy.isGibberish(decrypt))
+    if(!entropy.isGibberish(decrypt)){
         console.log(decrypt);
+        console.log(line);
+    }
     strs.push(line);
 });
 

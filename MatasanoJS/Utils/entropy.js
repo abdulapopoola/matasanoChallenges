@@ -47,16 +47,20 @@ function getAllPossible(str) {
 }
 
 function crossEntropy(str, freqArr) {
-    str = str.toLowerCase();
+    str = str.replace(/\s/g, '');
     let sum = 0;
     let nonAlphabetical = 0;
     let len = str.length;
     for (let i = 0; i < len; i++) {
         let charIndex = str.charCodeAt(i);
-        if (charIndex >= 97 && charIndex <= 122) {
+        if (charIndex >= 65 && charIndex <= 90) {
+            var charFreq = freqArr[charIndex - 65];
+            sum += log2(charFreq);
+        } else if (charIndex >= 97 && charIndex <= 122) {
             var charFreq = freqArr[charIndex - 97];
             sum += log2(charFreq);
-        } else {
+        }
+        else {
             nonAlphabetical++;
         }
     }
@@ -82,8 +86,8 @@ function decrypt(str) {
         // Compare by lowest entropy, break ties by lowest shift
         if (x[1] < y[1]) return -1;
         else if (x[1] > y[1]) return 1;
-        else if (x[0] < y[0]) return -1;
-        else if (x[0] > y[0]) return 1;
+        else if (x[0] > y[0]) return -1;
+        else if (x[0] < y[0]) return 1;
         else return 0;
     });
 
@@ -102,8 +106,8 @@ function decryptMany(strs) {
         let indexCounter = 0;
         for (let i = 0, len = strPossibilities.length; i < len; i++) {
             let entropy = crossEntropy(strPossibilities[i], normalizedFreqs);
-            let index = i + 256*indexCounter;
-            if(entropy === Infinity){
+            let index = i + 256 * indexCounter;
+            if (entropy === Infinity) {
                 //continue;
             }
             //console.log("Entry "+ i +" : " + entropy);
@@ -126,15 +130,15 @@ function decryptMany(strs) {
     let bestAnswerIndex = entropies[0][0];
     console.log(entropies.length);
     console.log(bestAnswerIndex);
-    
-    for(let i=0; i < entropies.length; i++){
+
+    for (let i = 0; i < entropies.length; i++) {
         var index = entropies[i][0];
         var decode = possibilities[index];
-        if(!isGibberish(decode)){
+        if (!isGibberish(decode)) {
             //console.log(possibilities[index]);
         }
     }
-    
+
     return possibilities[bestAnswerIndex];
 }
 
@@ -150,11 +154,11 @@ function isGibberish(str) {
             nonAlphabetical++;
         }
     }
-    
-    if(nonAlphabetical > len / 5){
+
+    if (nonAlphabetical > len / 5) {
         return true;
     }
-    
+
     return false;
 }
 
@@ -169,3 +173,7 @@ function log2(val) {
 exports.decrypt = decrypt;
 exports.decryptMany = decryptMany;
 exports.isGibberish = isGibberish;
+
+//fix entropy selection algo
+//use gibberish content to filter
+//if they are same, then use one that is more lowercase
