@@ -192,6 +192,6 @@ exports.decrypt = decrypt;
 exports.decryptMany = decryptMany;
 exports.isGibberish = isGibberish;
 
-//fix entropy selection algo
-//use gibberish content to filter
-//if they are same, then use one that is more lowercase
+//consider using this as a module
+//fix decryptMany
+//clean up code
