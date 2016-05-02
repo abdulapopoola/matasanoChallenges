@@ -78,16 +78,19 @@ function decrypt(str) {
     let entropies = [];
     for (let i = 0, len = possibilities.length; i < len; i++) {
         let entropy = crossEntropy(possibilities[i], normalizedFreqs);
-        entropies.push([i, entropy]);
+        let hasNonAlphabetical = +containsNonAlphabetical(possibilities[i]);//cast to number
+        entropies.push([i, entropy, hasNonAlphabetical]);
         //console.log("Entry "+ i +" : " + entropy)
     }
 
     entropies.sort(function (x, y) {
-        // Compare by lowest entropy, break ties by lowest shift
+        // Compare by lowest entropy, then by nonAlphabetical char count and finally break ties by lowest shift
         if (x[1] < y[1]) return -1;
         else if (x[1] > y[1]) return 1;
-        else if (x[0] > y[0]) return -1;
-        else if (x[0] < y[0]) return 1;
+        else if (x[2] < y[2]) return -1;
+        else if (x[2] > y[2]) return 1;
+        else if (x[0] < y[0]) return -1;
+        else if (x[0] > y[0]) return 1;
         else return 0;
     });
 
@@ -140,6 +143,21 @@ function decryptMany(strs) {
     }
 
     return possibilities[bestAnswerIndex];
+}
+
+function containsNonAlphabetical(str) {
+    //strip all whitespace, use regex?
+    let strippedStr = str.replace(/\s/g, '').toLowerCase();
+    let strLen = strippedStr.length;
+
+    for (let i = 0; i < strLen; i++) {
+        let charCode = strippedStr.charCodeAt(i);
+        if (charCode < 97 || charCode > 122) {
+            return true;
+        }
+    }
+    
+    return false;
 }
 
 function isGibberish(str) {
