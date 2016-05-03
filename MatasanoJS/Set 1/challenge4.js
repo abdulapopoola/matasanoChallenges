@@ -23,7 +23,7 @@ rl.on('line', (line) => {
 });
 
 rl.on('close', (line) => {
-    //console.log(entropy.decryptMany(strs));
+    console.log(entropy.decryptMany(strs));
 });
 
 //nOW THAT THE PARTY IS JUMPING*

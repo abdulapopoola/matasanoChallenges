@@ -47,6 +47,10 @@ function getAllPossible(str) {
 }
 
 function crossEntropy(str, freqArr) {
+    if(isGibberish(str)){
+        return Infinity;
+    }
+    
     str = str.replace(/\s/g, '');
     let sum = 0;
     let nonAlphabetical = 0;
@@ -64,10 +68,7 @@ function crossEntropy(str, freqArr) {
             nonAlphabetical++;
         }
     }
-
-    if (nonAlphabetical > (len / 2)) {
-        return Infinity; //Mostly gibberish that might skew the entropy values
-    }
+    
     return -(sum / (len - nonAlphabetical));
 }
 
@@ -80,7 +81,6 @@ function decrypt(str) {
         let entropy = crossEntropy(possibilities[i], normalizedFreqs);
         let hasNonAlphabetical = +containsNonAlphabetical(possibilities[i]);//cast to number
         entropies.push([i, entropy, hasNonAlphabetical]);
-        //console.log("Entry "+ i +" : " + entropy)
     }
 
     entropies.sort(function (x, y) {
@@ -113,14 +113,12 @@ function decryptMany(strs) {
             if (entropy === Infinity) {
                 //continue;
             }
-            //console.log("Entry "+ i +" : " + entropy);
             entropies.push([i, entropy]);
             possibilities.push(strPossibilities[i]);
         }
         indexCounter++;
     }
 
-    console.log(possibilities.length);
     entropies.sort(function (x, y) {
         // Compare by lowest entropy, break ties by lowest shift
         if (x[1] < y[1]) return -1;
@@ -160,9 +158,8 @@ function containsNonAlphabetical(str) {
     return false;
 }
 
-function isGibberish(str) {
+function isGibberish(str, tolerance) {
     str = str.toLowerCase();
-    let sum = 0;
     let nonAlphabetical = 0;
     let len = str.length;
     for (let i = 0; i < len; i++) {
@@ -173,7 +170,8 @@ function isGibberish(str) {
         }
     }
 
-    if (nonAlphabetical > len / 5) {
+    tolerance = tolerance || 0.2;
+    if (nonAlphabetical > len * tolerance) {
         return true;
     }
 
@@ -195,3 +193,4 @@ exports.isGibberish = isGibberish;
 //consider using this as a module
 //fix decryptMany
 //clean up code
+//use nonAlphabetical char count as sorting tie breaker?
