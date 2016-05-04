@@ -1,6 +1,9 @@
 'use strict';
 const helpers = require('../Utils/helpers.js');
 
+const LOWERCASE_A_CHARCODE = 97; //a
+const LOWERCASE_Z_CHARCODE = 122; //z
+
 const UNIGRAM_FREQUENCIES = {
     a: 8.04,
     b: 1.48,
@@ -99,48 +102,43 @@ function decrypt(str) {
     //shift is also bestAnswerIndex
 }
 
-function decryptMany(strs) {
+function decryptMany(...possibilities) {
     let normalizedFreqs = helpers.values(UNIGRAM_FREQUENCIES).map(freq => freq / 100);
 
     let entropies = [];
-    let possibilities = [];
-    for (let str of strs) {
-        let strPossibilities = getAllPossible(str);
-        let indexCounter = 0;
-        for (let i = 0, len = strPossibilities.length; i < len; i++) {
-            let entropy = crossEntropy(strPossibilities[i], normalizedFreqs);
-            let index = i + 256 * indexCounter;
-            if (entropy === Infinity) {
-                //continue;
-            }
-            entropies.push([i, entropy]);
-            possibilities.push(strPossibilities[i]);
-        }
-        indexCounter++;
+    for (let i = 0, len = possibilities.length; i < len; i++) {
+        let entropy = crossEntropy(possibilities[i], normalizedFreqs);
+        let symbolCount = nonAlphaSymbolCount(possibilities[i]);
+        entropies.push([i, entropy, symbolCount]);
     }
 
     entropies.sort(function (x, y) {
-        // Compare by lowest entropy, break ties by lowest shift
+        // Compare by lowest entropy, then by symbol count and finally break ties by lowest shift
         if (x[1] < y[1]) return -1;
         else if (x[1] > y[1]) return 1;
+        else if (x[2] < y[2]) return -1;
+        else if (x[2] > y[2]) return 1;
         else if (x[0] < y[0]) return -1;
         else if (x[0] > y[0]) return 1;
         else return 0;
     });
 
-    let bestAnswerIndex = entropies[0][0];
-    console.log(entropies.length);
-    console.log(bestAnswerIndex);
+    return entropies;
+}
 
-    for (let i = 0; i < entropies.length; i++) {
-        var index = entropies[i][0];
-        var decode = possibilities[index];
-        if (!isGibberish(decode)) {
-            //console.log(possibilities[index]);
+function nonAlphaSymbolCount(str){
+    let strippedStr = str.replace(/\s/g, '').toLowerCase();
+    let strLen = strippedStr.length;
+
+    let count = 0;
+    for (let i = 0; i < strLen; i++) {
+        let charCode = strippedStr.charCodeAt(i);
+        if (charCode < LOWERCASE_A_CHARCODE || charCode > LOWERCASE_Z_CHARCODE) {
+            count++;
         }
     }
-
-    return possibilities[bestAnswerIndex];
+    
+    return count;
 }
 
 function containsNonAlphabetical(str) {
@@ -150,7 +148,7 @@ function containsNonAlphabetical(str) {
 
     for (let i = 0; i < strLen; i++) {
         let charCode = strippedStr.charCodeAt(i);
-        if (charCode < 97 || charCode > 122) {
+        if (charCode < LOWERCASE_A_CHARCODE || charCode > LOWERCASE_Z_CHARCODE) {
             return true;
         }
     }
@@ -163,8 +161,8 @@ function isGibberish(str, tolerance) {
     let nonAlphabetical = 0;
     let len = str.length;
     for (let i = 0; i < len; i++) {
-        let charIndex = str.charCodeAt(i);
-        if (charIndex >= 97 && charIndex <= 122) {
+        let charCode = str.charCodeAt(i);
+        if (charCode < LOWERCASE_A_CHARCODE || charCode > LOWERCASE_Z_CHARCODE) {
         } else {
             nonAlphabetical++;
         }
