@@ -66,6 +66,22 @@ function btoa(str) {
     return new Buffer(str).toString('base64');
 }
 
+function singleByteXORPossibilities(str) {
+    let byteArray1 = getByteValuesFromHexString(str);
+    let byteArrLen = byteArray1.length;
+
+    let possibilities = [];
+    for (let i = 0; i < 256; i++) {
+        let xorByteArr = new Array(byteArrLen);
+        xorByteArr.fill(i);
+        let xoredValues = XOR(byteArray1, xorByteArr);
+        let string = getASCIIStringFromHexValues(xoredValues);
+        possibilities.push(string);
+    }
+
+    return possibilities;
+}
+
 exports.XOR = XOR;
 exports.getByteValuesFromHexString = getByteValuesFromHexString;
 exports.checkSuccess = checkSuccess;
@@ -73,3 +89,4 @@ exports.getHexStringForByteValuesArray = getHexStringForByteValuesArray;
 exports.bufferToBase64 = bufferToBase64;
 exports.getASCIIStringFromHexValues = getASCIIStringFromHexValues;
 exports.values = values;
+exports.singleByteXORPossibilities = singleByteXORPossibilities;

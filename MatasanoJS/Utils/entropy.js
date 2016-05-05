@@ -50,10 +50,10 @@ function getAllPossible(str) {
 }
 
 function crossEntropy(str, freqArr) {
-    if(isGibberish(str)){
+    if (isGibberish(str)) {
         return Infinity;
     }
-    
+
     str = str.replace(/\s/g, '');
     let sum = 0;
     let nonAlphabetical = 0;
@@ -71,7 +71,7 @@ function crossEntropy(str, freqArr) {
             nonAlphabetical++;
         }
     }
-    
+
     return -(sum / (len - nonAlphabetical));
 }
 
@@ -102,7 +102,7 @@ function decrypt(str) {
     //shift is also bestAnswerIndex
 }
 
-function decryptMany(...possibilities) {
+function decryptMany(possibilities) {
     let normalizedFreqs = helpers.values(UNIGRAM_FREQUENCIES).map(freq => freq / 100);
 
     let entropies = [];
@@ -126,7 +126,7 @@ function decryptMany(...possibilities) {
     return entropies;
 }
 
-function nonAlphaSymbolCount(str){
+function nonAlphaSymbolCount(str) {
     let strippedStr = str.replace(/\s/g, '').toLowerCase();
     let strLen = strippedStr.length;
 
@@ -137,7 +137,7 @@ function nonAlphaSymbolCount(str){
             count++;
         }
     }
-    
+
     return count;
 }
 
@@ -152,7 +152,7 @@ function containsNonAlphabetical(str) {
             return true;
         }
     }
-    
+
     return false;
 }
 
@@ -163,7 +163,6 @@ function isGibberish(str, tolerance) {
     for (let i = 0; i < len; i++) {
         let charCode = str.charCodeAt(i);
         if (charCode < LOWERCASE_A_CHARCODE || charCode > LOWERCASE_Z_CHARCODE) {
-        } else {
             nonAlphabetical++;
         }
     }
