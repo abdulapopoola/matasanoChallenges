@@ -1,8 +1,9 @@
 'use strict';
-const helpers = require('../Utils/helpers.js');
 
 const LOWERCASE_A_CHARCODE = 97; //a
 const LOWERCASE_Z_CHARCODE = 122; //z
+const UPPERCASE_A_CHARCODE = 65; //A
+const UPPERCASE_Z_CHARCODE = 90; //Z
 
 const UNIGRAM_FREQUENCIES = {
     a: 8.04,
@@ -33,38 +34,21 @@ const UNIGRAM_FREQUENCIES = {
     z: 0.09
 };
 
-function getAllPossible(str) {
-    let byteArray1 = helpers.getByteValuesFromHexString(str);
-    let byteArrLen = byteArray1.length;
-
-    let possibilities = [];
-    for (let i = 0; i < 256; i++) {
-        let xorByteArr = new Array(byteArrLen);
-        xorByteArr.fill(i);
-        let xoredValues = helpers.XOR(byteArray1, xorByteArr);
-        let string = helpers.getASCIIStringFromHexValues(xoredValues);
-        possibilities.push(string);
-    }
-
-    return possibilities;
-}
-
 function crossEntropy(str, freqArr) {
     if (isGibberish(str)) {
         return Infinity;
     }
 
-    str = str.replace(/\s/g, '');
     let sum = 0;
     let nonAlphabetical = 0;
     let len = str.length;
     for (let i = 0; i < len; i++) {
-        let charIndex = str.charCodeAt(i);
-        if (charIndex >= 65 && charIndex <= 90) {
-            var charFreq = freqArr[charIndex - 65];
+        let charCode = str.charCodeAt(i);
+        if (charCode >= UPPERCASE_A_CHARCODE && charCode <= UPPERCASE_Z_CHARCODE) {
+            var charFreq = freqArr[charCode - UPPERCASE_A_CHARCODE];
             sum += log2(charFreq);
-        } else if (charIndex >= 97 && charIndex <= 122) {
-            var charFreq = freqArr[charIndex - 97];
+        } else if (charCode >= LOWERCASE_A_CHARCODE && charCode <= LOWERCASE_Z_CHARCODE) {
+            var charFreq = freqArr[charCode - LOWERCASE_A_CHARCODE];
             sum += log2(charFreq);
         }
         else {
@@ -75,35 +59,8 @@ function crossEntropy(str, freqArr) {
     return -(sum / (len - nonAlphabetical));
 }
 
-function decrypt(str) {
-    let normalizedFreqs = helpers.values(UNIGRAM_FREQUENCIES).map(freq => freq / 100);
-
-    let possibilities = getAllPossible(str);
-    let entropies = [];
-    for (let i = 0, len = possibilities.length; i < len; i++) {
-        let entropy = crossEntropy(possibilities[i], normalizedFreqs);
-        let hasNonAlphabetical = +containsNonAlphabetical(possibilities[i]);//cast to number
-        entropies.push([i, entropy, hasNonAlphabetical]);
-    }
-
-    entropies.sort(function (x, y) {
-        // Compare by lowest entropy, then by nonAlphabetical char count and finally break ties by lowest shift
-        if (x[1] < y[1]) return -1;
-        else if (x[1] > y[1]) return 1;
-        else if (x[2] < y[2]) return -1;
-        else if (x[2] > y[2]) return 1;
-        else if (x[0] < y[0]) return -1;
-        else if (x[0] > y[0]) return 1;
-        else return 0;
-    });
-
-    let bestAnswerIndex = entropies[0][0];
-    return possibilities[bestAnswerIndex];
-    //shift is also bestAnswerIndex
-}
-
 function decryptMany(possibilities) {
-    let normalizedFreqs = helpers.values(UNIGRAM_FREQUENCIES).map(freq => freq / 100);
+    let normalizedFreqs = values(UNIGRAM_FREQUENCIES).map(freq => freq / 100);
 
     let entropies = [];
     for (let i = 0, len = possibilities.length; i < len; i++) {
@@ -113,7 +70,7 @@ function decryptMany(possibilities) {
     }
 
     entropies.sort(function (x, y) {
-        // Compare by lowest entropy, then by symbol count and finally break ties by lowest shift
+        // Compare by lowest entropy, then by symbol count and finally break ties by selecting chars index order
         if (x[1] < y[1]) return -1;
         else if (x[1] > y[1]) return 1;
         else if (x[2] < y[2]) return -1;
@@ -141,38 +98,10 @@ function nonAlphaSymbolCount(str) {
     return count;
 }
 
-function containsNonAlphabetical(str) {
-    //strip all whitespace, use regex?
-    let strippedStr = str.replace(/\s/g, '').toLowerCase();
-    let strLen = strippedStr.length;
-
-    for (let i = 0; i < strLen; i++) {
-        let charCode = strippedStr.charCodeAt(i);
-        if (charCode < LOWERCASE_A_CHARCODE || charCode > LOWERCASE_Z_CHARCODE) {
-            return true;
-        }
-    }
-
-    return false;
-}
-
 function isGibberish(str, tolerance) {
-    str = str.toLowerCase();
-    let nonAlphabetical = 0;
-    let len = str.length;
-    for (let i = 0; i < len; i++) {
-        let charCode = str.charCodeAt(i);
-        if (charCode < LOWERCASE_A_CHARCODE || charCode > LOWERCASE_Z_CHARCODE) {
-            nonAlphabetical++;
-        }
-    }
-
+    let nonAlphabetical = nonAlphaSymbolCount(str);
     tolerance = tolerance || 0.2;
-    if (nonAlphabetical > len * tolerance) {
-        return true;
-    }
-
-    return false;
+    return nonAlphabetical > str.length * tolerance
 }
 
 function log2(val) {
@@ -183,11 +112,8 @@ function log2(val) {
     }
 }
 
-exports.decrypt = decrypt;
-exports.decryptMany = decryptMany;
-exports.isGibberish = isGibberish;
+function values(obj) {
+    return Object.keys(obj).map(key => obj[key]);
+}
 
-//consider using this as a module
-//fix decryptMany
-//clean up code
-//use nonAlphabetical char count as sorting tie breaker?
+exports.decryptMany = decryptMany;

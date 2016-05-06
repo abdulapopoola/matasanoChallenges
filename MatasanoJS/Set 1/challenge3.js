@@ -8,5 +8,4 @@ let rankedIndices = entropy.decryptMany(singleByteXORPossibilities);
 
 let bestGuessIndex = rankedIndices[0][0];
 let output = singleByteXORPossibilities[bestGuessIndex];
-console.log(output);
-//helpers.checkSuccess("Cooking MC's like a pound of bacon", output);
+helpers.checkSuccess("Cooking MC's like a pound of bacon", output);
