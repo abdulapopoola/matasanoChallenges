@@ -4,7 +4,7 @@ function getByteValuesFromHexString(hex) {
     //returns integer values for bytes e.g. FF would be converted to 255
     const HEX_CHAR_LEN = 2; //hex strings are 2 chars long each
     if (hex.length % 2 != 0) {
-        throw new Error("Badly formed hex string: " + hex);
+        throw new Error('Badly formed hex string: ' + hex);
     }
 
     let strLen = hex.length;

@@ -1,0 +1,6 @@
+{
+    "preset": "grunt",
+    "requireCurlyBraces": null,
+    "validateIndentation": null,
+    "disallowTrailingWhitespace": true
+}

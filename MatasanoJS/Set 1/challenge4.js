@@ -14,11 +14,10 @@ rl.on('line', line => strs.push(line));
 
 rl.on('close', (line) => {
     let allPossibilities = [];
-    
-    for(let str of strs){
+
+    for (let str of strs) {
         allPossibilities = allPossibilities.concat(...helpers.singleByteXORPossibilities(str));
     }
-    
     let rankedIndices = entropy.decryptMany(allPossibilities);
     let bestGuessIndex = rankedIndices[0][0];
     let output = allPossibilities[bestGuessIndex];

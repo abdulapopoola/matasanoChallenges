@@ -1,4 +1,5 @@
 'use strict';
+
 const helpers = require('../Utils/helpers.js');
 
 let byteArray1 = helpers.getByteValuesFromHexString('1c0111001f010100061a024b53535009181c');
