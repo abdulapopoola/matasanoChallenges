@@ -50,8 +50,7 @@ function crossEntropy(str, freqArr) {
         } else if (charCode >= LOWERCASE_A_CHARCODE && charCode <= LOWERCASE_Z_CHARCODE) {
             var charFreq = freqArr[charCode - LOWERCASE_A_CHARCODE];
             sum += log2(charFreq);
-        }
-        else {
+        } else {
             nonAlphabetical++;
         }
     }
@@ -69,7 +68,7 @@ function decryptMany(possibilities) {
         entropies.push([i, entropy, symbolCount]);
     }
 
-    entropies.sort(function (x, y) {
+    entropies.sort(function(x, y) {
         // Compare by lowest entropy, then by symbol count and finally break ties by selecting chars index order
         if (x[1] < y[1]) return -1;
         else if (x[1] > y[1]) return 1;

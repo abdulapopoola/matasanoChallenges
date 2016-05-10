@@ -1,5 +1,9 @@
 'use strict';
 
+function getHexValuesFromString(str) {
+    return str.split('').map((char) => char.charCodeAt(0).toString(16)).join('');
+}
+
 function getByteValuesFromHexString(hex) {
     //returns integer values for bytes e.g. FF would be converted to 255
     const HEX_CHAR_LEN = 2; //hex strings are 2 chars long each
@@ -17,6 +21,19 @@ function getByteValuesFromHexString(hex) {
     }
 
     return bufferView;
+}
+
+function repeatingXOR(byteArray1, byteArray2) {
+    let byteArray1Len = byteArray1.length;
+    let byteArray2Len = byteArray2.length;
+
+    let xoredBytes = new Array(byteArray1Len);
+    for (let i = 0; i < byteArray1Len; i++) {
+        let xorByteIndex = i % byteArray2Len;
+        xoredBytes[i] = byteArray1[i] ^ byteArray2[xorByteIndex];
+    }
+
+    return xoredBytes;
 }
 
 function XOR(byteArray1, byteArray2) {
@@ -90,3 +107,6 @@ exports.bufferToBase64 = bufferToBase64;
 exports.getASCIIStringFromHexValues = getASCIIStringFromHexValues;
 exports.values = values;
 exports.singleByteXORPossibilities = singleByteXORPossibilities;
+exports.repeatingXOR = repeatingXOR;
+exports.getHexValuesFromString = getHexValuesFromString;
+//Split into two files? Hex, xor utilities + result verifier?
