@@ -1,7 +1,7 @@
 'use strict';
 
 function getHexValuesFromString(str) {
-    return str.split('').map((char) => char.charCodeAt(0).toString(16)).join('');
+    return str.split('').map((char) => char.charCodeAt(0)); //.toString(16));
 }
 
 function getByteValuesFromHexString(hex) {
@@ -64,7 +64,14 @@ function bufferToBase64(buffer) {
 
 function getHexStringForByteValuesArray(byteValuesArray) {
     //returns hex string for bytes values e.g. [255, 255] would be converted into 'FFFF'
-    let hexValues = byteValuesArray.map(byteVal => (byteVal).toString(16));
+    let hexValues = byteValuesArray.map(byteVal => {
+        let val = (byteVal).toString(16);
+        if (val.length === 1) {
+            val = '0' + val; //pad with leading 0
+        }
+
+        return val;
+    });
     return hexValues.join('');
 }
 

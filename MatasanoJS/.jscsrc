@@ -2,5 +2,6 @@
     "preset": "grunt",
     "requireCurlyBraces": null,
     "validateIndentation": null,
-    "disallowTrailingWhitespace": true
+    "disallowTrailingWhitespace": true,
+    "maximumLineLength": null
 }
