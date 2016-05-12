@@ -1,7 +1,7 @@
 'use strict';
 
 function getHexValuesFromString(str) {
-    return str.split('').map((char) => char.charCodeAt(0)); //.toString(16));
+    return str.split('').map((char) => char.charCodeAt(0));
 }
 
 function getByteValuesFromHexString(hex) {
