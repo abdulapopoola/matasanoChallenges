@@ -8,7 +8,7 @@ function getByteValuesFromHexString(hex) {
     //returns integer values for bytes e.g. FF would be converted to 255
     const HEX_CHAR_LEN = 2; //hex strings are 2 chars long each
     if (hex.length % 2 != 0) {
-        throw new Error('Badly formed hex string: ' + hex);
+        throw new Error(`Badly formed hex string: ${hex}`);
     }
 
     let strLen = hex.length;
@@ -39,7 +39,7 @@ function repeatingXOR(byteArray1, byteArray2) {
 function XOR(byteArray1, byteArray2) {
     let byteArray1Len = byteArray1.length;
     if (byteArray1Len !== byteArray2.length) {
-        throw new Error('Unequal byte lengths: ' + byteArray1Len + ' : ' + byteArray2.length);
+        throw new Error(`Unequal byte lengths: \n${byteArray1Len} \n${byteArray2.length}`);
     }
 
     let xoredBytes = new Array(byteArray1Len);
@@ -52,7 +52,7 @@ function XOR(byteArray1, byteArray2) {
 
 function checkSuccess(expected, actual) {
     if (expected !== actual) {
-        throw new Error('Failed to give expected output. Expected: ' + expected + ' Actual: ' + actual);
+        throw new Error(`Failed to give expected output.\nExpected: ${expected}\nActual: ${actual}`);
     }
     console.log('GREAT JOB!!!');
 }

@@ -100,7 +100,7 @@ function nonAlphaSymbolCount(str) {
 function isGibberish(str, tolerance) {
     let nonAlphabetical = nonAlphaSymbolCount(str);
     tolerance = tolerance || 0.2;
-    return nonAlphabetical > str.length * tolerance
+    return nonAlphabetical > str.length * tolerance;
 }
 
 function log2(val) {
