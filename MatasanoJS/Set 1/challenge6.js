@@ -5,15 +5,8 @@ const stringMetrics = require('../Utils/stringMetrics.js');
 const test = `this is a test`;
 const key = 'wokka wokka!!!';
 
-//Get each hex char
-//write function to encrypt byte against byte
-//output it
-let hexValues = helpers.getHexValuesFromString(test);
-let keyHexValues = helpers.getHexValuesFromString(key);
-let xoredBytes = helpers.XOR(hexValues, keyHexValues);
-let output = helpers.getHexStringForByteValuesArray(xoredBytes);
+let output = stringMetrics.binaryHammingDistance(test, key);
 
 //convert output to binary values
 //count number of ones in output for hamming distance
-let expected = '0b3637272a2b2e63622c2e69692a23693a2a3c6324202d623d63343c2a26226324272765272a282b2f20430a652e2c652a3124333a653e2b2027630c692b20283165286326302e27282f';
-helpers.checkSuccess(expected, output);
+console.log(output);

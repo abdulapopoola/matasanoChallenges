@@ -1,6 +1,6 @@
 'use strict';
 
-function getHexValuesFromString(str) {
+function getCharCodeArray(str) {
     return str.split('').map((char) => char.charCodeAt(0));
 }
 
@@ -115,5 +115,5 @@ exports.getASCIIStringFromHexValues = getASCIIStringFromHexValues;
 exports.values = values;
 exports.singleByteXORPossibilities = singleByteXORPossibilities;
 exports.repeatingXOR = repeatingXOR;
-exports.getHexValuesFromString = getHexValuesFromString;
+exports.getCharCodeArray = getCharCodeArray;
 //Split into two files? Hex, xor utilities + result verifier?
