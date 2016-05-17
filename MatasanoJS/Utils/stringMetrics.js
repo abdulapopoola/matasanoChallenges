@@ -35,12 +35,12 @@ function binaryHammingDistance(str1, str2) {
     let binaryStrings = xoredValues.map(val => Number(val).toString(2));
 
     difference = binaryStrings.reduce((prev, curr) => {
-        return prev += curr.split('').reduce((prevSplit, currSplit) => {
+        return prev + curr.split('').reduce((prevSplit, currSplit) => {
             //less readable approach -> prev + (+curr)
-            return prevSplit + parseInt(curr, 2);
+            return prevSplit + parseInt(currSplit, 2);
         }, 0);
     }, 0);
-
+    
     return difference;
 }
 
