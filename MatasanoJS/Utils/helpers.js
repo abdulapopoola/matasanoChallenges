@@ -57,11 +57,6 @@ function checkSuccess(expected, actual) {
     console.log('GREAT JOB!!!');
 }
 
-function bufferToBase64(buffer) {
-    let binaryStr = String.fromCharCode.apply(String, buffer);
-    return btoa(binaryStr);
-}
-
 function getHexStringForByteValuesArray(byteValuesArray) {
     //returns hex string for bytes values e.g. [255, 255] would be converted into 'FFFF'
     let hexValues = byteValuesArray.map(byteVal => {
@@ -90,6 +85,13 @@ function btoa(str) {
     return new Buffer(str).toString('base64');
 }
 
+function atob(str) {
+    if (typeof window !== 'undefined' && window.atob) {
+        return window.atob(str);
+    }
+    return new Buffer(str, 'base64').toString();
+}
+
 function singleByteXORPossibilities(str) {
     let byteArray1 = getByteValuesFromHexString(str);
     let byteArrLen = byteArray1.length;
@@ -110,10 +112,11 @@ exports.XOR = XOR;
 exports.getByteValuesFromHexString = getByteValuesFromHexString;
 exports.checkSuccess = checkSuccess;
 exports.getHexStringForByteValuesArray = getHexStringForByteValuesArray;
-exports.bufferToBase64 = bufferToBase64;
 exports.getASCIIStringFromHexValues = getASCIIStringFromHexValues;
 exports.values = values;
 exports.singleByteXORPossibilities = singleByteXORPossibilities;
 exports.repeatingXOR = repeatingXOR;
 exports.getCharCodeArray = getCharCodeArray;
+exports.atob = atob;
+exports.btoa = btoa;
 //Split into two files? Hex, xor utilities + result verifier?

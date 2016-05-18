@@ -10,6 +10,8 @@ let str2CharCodeArray = helpers.getCharCodeArray(test2);
 let distance = stringMetrics.binaryHammingDistance(str1CharCodeArray, str2CharCodeArray);
 helpers.checkSuccess(37, distance);
 
+let encoded = 'SGVsbG8gV29ybGQh';
+
 const MIN_KEYSIZE = 2;
 const MAX_KEYSIZE = 40;
 

@@ -1,0 +1,27 @@
+{
+  "name": "matasanojs",
+  "version": "0.1.0",
+  "description": "Solution to Matasano challenges",
+  "main": "index.js",
+  "directories": {
+    "test": "tests"
+  },
+  "scripts": {
+    "test": "npm test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/abdulapopoola/matasanoChallenges.git"
+  },
+  "keywords": [
+    "matasano",
+    "javascript",
+    "cryptography"
+  ],
+  "author": "abdulapopoola",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/abdulapopoola/matasanoChallenges/issues"
+  },
+  "homepage": "https://github.com/abdulapopoola/matasanoChallenges#readme"
+}
