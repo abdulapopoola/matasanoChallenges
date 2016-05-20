@@ -1,7 +1,8 @@
-module.exports = function(config) {
+module.exports = function (config) {
     config.set({
-        frameworks: ['browserify', 'jasmine'],
+        frameworks: ['jasmine'],
         files: [
+            'node_modules/babel-polyfill/dist/polyfill.js',
             'src/**/*.js',
             'tests/**/*.js'
         ],
@@ -9,9 +10,21 @@ module.exports = function(config) {
             './node_modules/**/*.js',
             './vscode/**/*.js'
         ],
+        babelPreprocessor: {
+            options: {
+                presets: ['es2015'],
+                sourceMap: 'inline'
+            },
+            filename: function (file) {
+                return file.originalPath.replace(/\.js$/, '.es5.js');
+            },
+            sourceFileName: function (file) {
+                return file.originalPath;
+            }
+        },
         preprocessors: {
-            'src/**/*.js': ['browserify', 'eslint'],
-            'tests/**/*.js': ['browserify', 'eslint']
+            'src/**/*.js': ['babel'],
+            'tests/**/*.js': ['babel']
         },
         browserify: {
             debug: true,
