@@ -1,7 +1,19 @@
 'use strict';
+const helpers = require('helpers.js');
+const stringMetrics = require('stringMetrics.js');
 
-function extractKeysizeBlocks(blockSize) {
+const MIN_KEY_SIZE = 2;
+const MAX_KEY_SIZE = 40;
 
+function processKeySizeBlocks(arr) {
+    let results = [];
+    for (let i = MIN_KEY_SIZE; i <= MAX_KEY_SIZE; i++) {
+        let chunkedArray = chunk(arr, i);
+        let editDistance = stringMetrics.binaryHammingDistance(chunkedArray[0], chunkedArray[1]);
+        let normalizedDistance = editDistance / i;
+        results.push[[normalizedDistance, i]];
+    }
+    return results;
 }
 
 function chunk(arr, size) {

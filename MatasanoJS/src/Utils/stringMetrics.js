@@ -41,3 +41,4 @@ function binaryHammingDistance(byteValues1, byteValues2) {
 
 exports.hamming = hamming;
 exports.binaryHammingDistance = binaryHammingDistance;
+
