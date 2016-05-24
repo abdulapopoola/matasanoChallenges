@@ -32,6 +32,16 @@ function chunk(arr, size) {
     return chunks;
 }
 
+function chunkerizeCipherText(cipher, keySize) {
+    let bytes = helpers.getCharCodeArray(cipher);
+    let chunks = helpers.chunk(bytes, keySize);
+    return chunks;
+}
+
+function transposeCipherBlocks(chunks) {
+    //continue
+}
+
 exports.chunk = chunk;
 //write function to solve stage 3, picking up keysizes of each byte, finding edit distance and normalizing
 //
