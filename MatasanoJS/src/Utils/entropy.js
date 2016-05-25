@@ -68,7 +68,7 @@ function decryptMany(possibilities) {
         entropies.push([i, entropy, symbolCount]);
     }
 
-    entropies.sort(function(x, y) {
+    entropies.sort((x, y) => {
         // Compare by lowest entropy, then by symbol count and finally break ties by selecting chars index order
         if (x[1] < y[1]) return -1;
         else if (x[1] > y[1]) return 1;
