@@ -1,4 +1,5 @@
 'use strict';
+const entropy = require('entropy.js');
 const helpers = require('helpers.js');
 const stringMetrics = require('stringMetrics.js');
 
@@ -13,7 +14,7 @@ function processKeySizeBlocks(arr, startKeySize, endKeySize) {
         let normalizedDistance = editDistance / i;
         results.push[[normalizedDistance, i]];
     }
-    
+
     function comparator(x, y) {
         //compare by lowest editDistance, then by index
         if (x[0] < y[0]) return -1;
@@ -62,10 +63,25 @@ function transposeCipherBlocks(chunks) {
     }, []);
 }
 
-function decryptVigenere(cipher) {
+function decrypt(cipher) {
     let bytes = helpers.getCharCodeArray(cipher);
     let results = processKeySizeBlocks(bytes, MIN_KEY_SIZE, MAX_KEY_SIZE);
+    let bestChoice = results[0];
+    let bestKeySize = bestChoice[1];
+    let splitCipherText = chunkerizeCipherText(cipher, bestKeySize);
+    let transposedCipherTextBlocks = transposeCipherBlocks(splitCipherText);
+
+    let keys = [];
+    for (let transposedBlock of transposedCipherTextBlocks) {
+        let blockPossibilities = helpers.singleByteXORPossibilities(transposedBlock);
+        let rankedIndices = entropy.decryptMany(blockPossibilities);
+        let bestGuessIndex = rankedIndices[0][0];
+        console.log(blockPossibilities[bestGuessIndex]);
+        keys.push(bestGuessIndex);
+    }
+
+    return keys;
 }
 
-exports.chunkerize = chunkerize;
-exports.transposeCipherBlocks = transposeCipherBlocks;
+exports.decrypt = decrypt;
+

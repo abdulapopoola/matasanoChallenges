@@ -3,6 +3,7 @@ const file = require('../Utils/file.js');
 const helpers = require('../Utils/helpers.js');
 const path = require('path');
 const stringMetrics = require('../Utils/stringMetrics.js');
+const vigenere = require('../Utils/vigenere.js');
 
 // const test1 = `this is a test`;
 // const test2 = 'wokka wokka!!!';
@@ -18,9 +19,8 @@ let decodedContent = helpers.atob(contents);
 const MIN_KEYSIZE = 2;
 const MAX_KEYSIZE = 40;
 
-function findBestKey() {
-    
-}
+let output = vigenere.decrypt(decodedContent);
+console.log(output);
 
 //decrypt file -> convert from base64
 //write function to read file into some storage
