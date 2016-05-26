@@ -1,5 +1,5 @@
 'use strict';
-const helpers = require('../Utils/helpers.js');
+const helpers = require('./helpers.js');
 
 function hamming(str1, str2) {
     let str1Len = str1.length;

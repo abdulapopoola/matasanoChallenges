@@ -1,7 +1,7 @@
 'use strict';
-const entropy = require('entropy.js');
-const helpers = require('helpers.js');
-const stringMetrics = require('stringMetrics.js');
+const entropy = require('./entropy.js');
+const helpers = require('./helpers.js');
+const stringMetrics = require('./stringMetrics.js');
 
 const MIN_KEY_SIZE = 2;
 const MAX_KEY_SIZE = 40;
@@ -12,7 +12,7 @@ function processKeySizeBlocks(arr, startKeySize, endKeySize) {
         let chunkedArray = chunkerize(arr, i);
         let editDistance = stringMetrics.binaryHammingDistance(chunkedArray[0], chunkedArray[1]);
         let normalizedDistance = editDistance / i;
-        results.push[[normalizedDistance, i]];
+        results.push([normalizedDistance, i]);
     }
 
     function comparator(x, y) {
@@ -24,7 +24,7 @@ function processKeySizeBlocks(arr, startKeySize, endKeySize) {
         else return 0;
     }
 
-    result.sort(comparator);
+    results.sort(comparator);
     return results;
 }
 
@@ -46,7 +46,7 @@ function chunkerize(arr, size) {
 
 function chunkerizeCipherText(cipher, keySize) {
     let bytes = helpers.getCharCodeArray(cipher);
-    let chunks = helpers.chunk(bytes, keySize);
+    let chunks = chunkerize(bytes, keySize);
     return chunks;
 }
 
