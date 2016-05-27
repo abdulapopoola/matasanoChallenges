@@ -73,10 +73,11 @@ function decrypt(cipher) {
 
     let keys = [];
     for (let transposedBlock of transposedCipherTextBlocks) {
-        let blockPossibilities = helpers.singleByteXORPossibilities(transposedBlock);
+        let joinedBlock = helpers.getHexStringForByteValuesArray(transposedBlock);
+        let blockPossibilities = helpers.singleByteXORPossibilities(joinedBlock);
         let rankedIndices = entropy.decryptMany(blockPossibilities);
         let bestGuessIndex = rankedIndices[0][0];
-        console.log(blockPossibilities[bestGuessIndex]);
+        //console.log(blockPossibilities[bestGuessIndex]);
         keys.push(bestGuessIndex);
     }
 
