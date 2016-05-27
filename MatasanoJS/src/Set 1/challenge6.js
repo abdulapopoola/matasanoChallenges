@@ -1,4 +1,5 @@
 'use strict';
+const entropy = require('../Utils/entropy.js');
 const file = require('../Utils/file.js');
 const helpers = require('../Utils/helpers.js');
 const path = require('path');
@@ -19,8 +20,18 @@ let decodedContent = helpers.atob(contents);
 const MIN_KEYSIZE = 2;
 const MAX_KEYSIZE = 40;
 
-let output = vigenere.decrypt(decodedContent);
-console.log(output);
+//let output = vigenere.decrypt('KGFQLMG');
+//console.log(output);
+
+//let decrypted = helpers.getASCIIStringFromHexValues(output);
+//console.log(decrypted);
+
+let test = helpers.getCharCodeArray('KGFQLMG');
+let joinedBlock = helpers.getHexStringForByteValuesArray(test);
+let blockPossibilities = helpers.singleByteXORPossibilities(joinedBlock);
+let rankedIndices = entropy.decryptMany(blockPossibilities);
+let bestGuessIndex = rankedIndices[0][0];
+console.log(bestGuessIndex);
 
 //decrypt file -> convert from base64
 //write function to read file into some storage
