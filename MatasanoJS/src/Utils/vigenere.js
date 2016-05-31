@@ -6,6 +6,15 @@ const stringMetrics = require('./stringMetrics.js');
 const MIN_KEY_SIZE = 2;
 const MAX_KEY_SIZE = 40;
 
+function processKeySize(arr, keySize) {
+    let repeats = 10;
+    let editDistance = 0;
+
+    for(let i = 0; i < repeats; i++) {
+        
+    }
+}
+
 function processKeySizeBlocks(arr, startKeySize, endKeySize) {
     let results = [];
     for (let i = startKeySize; i <= endKeySize; i++) {
